@@ -1,0 +1,9 @@
+POST http://localhost:8020/top-up
+Content-Type: application/json
+
+{
+    "title_game": "PUBG Mobile",
+    "description": "UC Top Up",
+    "price": "12.000",
+    "dateTime": "2025-01-01T15:30:00.000Z"
+}
