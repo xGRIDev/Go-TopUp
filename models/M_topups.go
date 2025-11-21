@@ -73,3 +73,31 @@ func GetTopUpByID(id int64) (*TopUp, error) {
 	}
 	return &topups, err
 }
+
+func (topup TopUp) Update() error {
+	quer := `
+	UPDATE topups SET
+	titlegame = ?, description = ?, price = ?, dateTime = ?
+	WHERE id = ? 
+	`
+	statemnt, err := db.DB.Prepare(quer)
+	if err != nil {
+		return err
+	}
+	defer statemnt.Close()
+	_, err = statemnt.Exec(topup.TitleGame, topup.Description, topup.Price, topup.DateTime, topup.ID)
+	return err
+
+}
+
+func (topup TopUp) Delete() error {
+	quer := "DELETE FROM topups WHERE id = ?"
+	sttmnt, err := db.DB.Prepare(quer)
+	if err != nil {
+		return nil
+	}
+
+	defer sttmnt.Close()
+	_, err = sttmnt.Exec(topup.ID)
+	return err
+}

@@ -54,3 +54,48 @@ func getTopUpID(context *gin.Context) {
 
 	context.JSON(http.StatusOK, topup)
 }
+
+func updateItemTopUp(context *gin.Context) {
+	topupID, err := strconv.ParseInt(context.Param("id"), 10, 64)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not Parse Topup-ID"})
+		return
+	}
+	_, err = M_topups.GetTopUpByID(topupID)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not fetch the data"})
+		return
+	}
+
+	var TopupUpdated M_topups.TopUp
+	err = context.ShouldBindJSON(&TopupUpdated)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse request data."})
+	}
+	context.JSON(http.StatusOK, gin.H{"message": "Event Updated Successfully"})
+
+}
+
+func deleteItemTopUp(context *gin.Context) {
+
+	TopupID, err := strconv.ParseInt(context.Param("id"), 10, 64)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not Parse Topup-ID"})
+		return
+	}
+
+	Topup, err := M_topups.GetTopUpByID(TopupID)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not fetch the data"})
+		return
+	}
+
+	err = Topup.Delete()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not delete the data"})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "Deleted Item Successfully"})
+
+}

@@ -1,0 +1,9 @@
+PUT http://localhost:8020/top-up/6
+Content-Type: application/json
+
+{
+    "title_game": "Pubg-Mobile",
+    "description": "UC Top Up",
+    "price": "2.000",
+    "dateTime": "2025-01-01T15:30:00.000Z"
+}
