@@ -1,11 +1,8 @@
 package main
 
 import (
-	"net/http"
-	"strconv"
-
 	db "example.com/topup-restapi/DB"
-	M_topup "example.com/topup-restapi/models"
+	routes "example.com/topup-restapi/Routes"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,56 +10,7 @@ func main() {
 	db.DBinit()
 	server := gin.Default()
 
-	server.GET("/top-up", getTopUp)
-	server.POST("/top-up", createTopUp)
-	server.GET("/top-up/:id", getTopUpID)
+	routes.TopupRegistRoutes(server)
 
 	server.Run(":8020")
-}
-
-func getTopUp(context *gin.Context) {
-	//topups := M_topup.GetAllItem()
-	topups, err := M_topup.GetAllItem()
-	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not fethcing the Data. Please Try Again"})
-	}
-	//	context.JSON(http.StatusOK, topups)
-	context.JSON(http.StatusOK, topups)
-}
-
-func createTopUp(context *gin.Context) {
-	var topup M_topup.TopUp
-	err := context.ShouldBindJSON(&topup)
-
-	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"message": "Couldn't Parse Request The Data"})
-		return
-	}
-
-	topup.ID = 1
-	topup.UserID = 1
-
-	err = topup.Save()
-	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not Create Topup. Please Try Again"})
-		return
-	}
-	context.JSON(http.StatusCreated, gin.H{"message": "Create Topup", "topup": topup})
-
-}
-
-func getTopUpID(context *gin.Context) {
-	TopupID, err := strconv.ParseInt(context.Param("id"), 10, 64)
-	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not Parse Topup-ID"})
-		return
-	}
-
-	topup, err := M_topup.GetTopUpByID(TopupID)
-	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could Fetch Topup"})
-		return
-	}
-
-	context.JSON(http.StatusOK, topup)
 }
