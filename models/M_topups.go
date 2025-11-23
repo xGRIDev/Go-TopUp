@@ -1,4 +1,4 @@
-package M_topups
+package models
 
 import (
 	"time"

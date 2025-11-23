@@ -8,4 +8,7 @@ func TopupRegistRoutes(server *gin.Engine) {
 	server.GET("/top-up/:id", getTopUpID)
 	server.PUT("/top-up/:id", updateItemTopUp)
 	server.DELETE("/top-up/:id", deleteItemTopUp)
+
+	//USERS-ROUTE
+	server.POST("/sign-up", UserSignUp)
 }
