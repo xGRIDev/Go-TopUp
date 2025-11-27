@@ -11,4 +11,5 @@ func TopupRegistRoutes(server *gin.Engine) {
 
 	//USERS-ROUTE
 	server.POST("/sign-up", UserSignUp)
+	server.POST("/sign-in", UserSignIn)
 }

@@ -21,3 +21,20 @@ func UserSignUp(context *gin.Context) {
 	}
 	context.JSON(http.StatusOK, gin.H{"message": "User Table Created."})
 }
+
+func UserSignIn(context *gin.Context) {
+	var users models.Users
+
+	err := context.ShouldBindJSON(&users)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Could Not Parse Request The Data"})
+	}
+
+	err = users.LoginCredentialValidate()
+
+	if err != nil {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Could Not Authenticated User."})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"message": "Login Successfully."})
+}
