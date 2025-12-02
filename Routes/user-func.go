@@ -3,6 +3,7 @@ package routes
 import (
 	"net/http"
 
+	utils "example.com/topup-restapi/Utils"
 	"example.com/topup-restapi/models"
 	"github.com/gin-gonic/gin"
 )
@@ -19,7 +20,7 @@ func UserSignUp(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "could not create User"})
 		return
 	}
-	context.JSON(http.StatusOK, gin.H{"message": "User Table Created."})
+	context.JSON(http.StatusCreated, gin.H{"message": "User Table Created."})
 }
 
 func UserSignIn(context *gin.Context) {
@@ -36,5 +37,11 @@ func UserSignIn(context *gin.Context) {
 		context.JSON(http.StatusUnauthorized, gin.H{"message": "Could Not Authenticated User."})
 		return
 	}
-	context.JSON(http.StatusOK, gin.H{"message": "Login Successfully."})
+
+	token, err := utils.JWTGenerate(users.Email, users.ID)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could Not authenticated user."})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"message": "Login Successfully.", "token": token})
 }

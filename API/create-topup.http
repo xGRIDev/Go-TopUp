@@ -1,5 +1,6 @@
 POST http://localhost:8020/top-up
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJleHAiOjE3NjQ2NDkwMTUsInVzZXJJZCI6MH0.dOQlxLLQ6AaiBbzLtgTRLD3Z2PF3rsG9bG1JnuL45kY
 
 {
     "title_game": "PUBG Mobile",

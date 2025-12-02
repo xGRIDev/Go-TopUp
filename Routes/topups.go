@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	utils "example.com/topup-restapi/Utils"
 	M_topups "example.com/topup-restapi/models"
 	"github.com/gin-gonic/gin"
 )
@@ -19,8 +20,21 @@ func getTopUp(context *gin.Context) {
 }
 
 func createTopUp(context *gin.Context) {
+	token := context.Request.Header.Get("Authorization")
+
+	if token == "" {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Not Authorized"})
+		return
+	}
+
+	err := utils.VerifToken(token)
+	if err != nil {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Not Authorized"})
+		return
+	}
+
 	var topup M_topups.TopUp
-	err := context.ShouldBindJSON(&topup)
+	err = context.ShouldBindJSON(&topup)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Couldn't Parse Request The Data"})
